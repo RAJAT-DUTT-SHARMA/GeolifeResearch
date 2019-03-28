@@ -1,8 +1,5 @@
-package pocessing;
 import java.util.ArrayList;
 import java.util.List;
-
-import beans.PointHybrid;
 
 public class ProcessingUtilities {
 
@@ -20,11 +17,11 @@ public class ProcessingUtilities {
 		List<Boolean> walkPoint=new ArrayList<>();
 		int i=0;
 		PointHybrid p1=points.get(i),p2;
-		for(i=1;i<points.size()-1;i++) {
+		for(i=1;i<points.size();i++) {
 			p2=points.get(i);
 			
 			//now get the velocity and acceleration at each point and label them walk or non walk points
-			if(PointFunctions.velocityPoint(p2, p1)<1.8d && PointFunctions.accelerationPoints(points.get(i+1),p2, p1)<0.6d){
+			if(PointFunctions.velocityPoint(p2, p1)<1.8d && PointFunctions.accelerationPoints(p2, p1)<0.6d){
 				//walk point 
 				walkPoint.add(true);
 			}else {
@@ -198,7 +195,7 @@ public class ProcessingUtilities {
 	}
 	
 	
-	public static double averageSpeedSegment(List<PointHybrid> segment){
+	static double averageSpeedSegment(List<PointHybrid> segment){
 		if(segment.size()==0) {
 			return 0d;
 		}
@@ -207,14 +204,15 @@ public class ProcessingUtilities {
 		p1=segment.get(0);
 		for(int i=1;i<segment.size();i++) {
 			p2=segment.get(i);
-			velocitySum=(velocitySum*i+PointFunctions.velocityPoint(p2, p1))/(i+1);
-			//System.out.println(PointFunctions.velocityPoint(p2, p1));
+			velocitySum+=PointFunctions.velocityPoint(p2, p1);
 			p1=p2;
 		}
-		return velocitySum;	
+		return velocitySum/segment.size();
+		
 	}
 	
-	public static double distanceSegment(List<PointHybrid> segment){
+	
+	static double distanceSegment(List<PointHybrid> segment){
 		int i=0;
 		PointHybrid p1=segment.get(i),p2;
 		double distance=0d;

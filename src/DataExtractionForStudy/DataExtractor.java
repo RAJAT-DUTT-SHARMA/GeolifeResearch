@@ -10,14 +10,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import com.google.gson.Gson;
-import pocessing.PointHybrid;
+import com.google.gson.reflect.TypeToken;
+
+import beans.PointHybrid;
 
 public class DataExtractor {
 
-	static String dirName="/media/errajatds/Stuff/work stuff/iot/iot data/geolife/Geolife Trajectories 1.3/";
-	static String extactedDataDirName="Study data for non walk transportation modes/";
-	static String dataDirName="Data/";
+	public static String dirName="/media/errajatds/R&D/work stuff/iot/iot data/geolife/Geolife Trajectories 1.3/";
+	public static String extactedDataDirName="Study data for non walk transportation modes/";
+	public static String dataDirName="Data/";
 	static String filteredDataDirName="FilteredData/";
+	
 	static void getSegments(String username, String transportationMode){
 		//1. read the labels.txt file
 
@@ -28,23 +31,26 @@ public class DataExtractor {
 
 			List<Date> startTimes=new ArrayList<>();
 			List<Date> endTimes=new ArrayList<>();
-
+			System.out.println(transportationMode);
 			BufferedReader reader=new BufferedReader(new FileReader(labels));
 			String line="";
 			reader.readLine();
 			while((line=reader.readLine())!=null){
 				String strings[]=line.split("\t");
 				if(strings[2].equals(transportationMode)) {
-					Date startTime=new SimpleDateFormat("yyyy/MM/dd hh:mm:ss").parse(strings[0]);
-					Date endTime=new SimpleDateFormat("yyyy/MM/dd hh:mm:ss").parse(strings[1]);
+					Date startTime=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(strings[0]);
+					Date endTime=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(strings[1]);
 					startTimes.add(startTime);
-					endTimes.add(endTime);
+					endTimes.add(endTime);	
 				}
 			}
 			reader.close();	
+			
 			if(startTimes.isEmpty()) {
 				return;
 			}
+			
+		
 			
 			//2. read the trajectory files
 			File dir=new File(dirName+filteredDataDirName+username+"/");
@@ -55,22 +61,15 @@ public class DataExtractor {
 			for(File file:files) {
 				//read the segments.
 				reader=new BufferedReader(new FileReader(file));
-				for(int i=0;i<6;i++) {
-					reader.readLine();
-				}
+				String jsonData=reader.readLine();
+				Gson gson=new Gson();
 				
-				List<PointHybrid> segment=new ArrayList<>();
+				List<PointHybrid> tripData=gson.fromJson(jsonData, new TypeToken<List<PointHybrid>>() {}.getType());
+				
 				boolean flag=true;
-				while((line=reader.readLine())!=null){
-					String []dataCols=line.split(",");
-					float lattitude;
-					float longitude;
-					Date timeStamp;
-					lattitude=Float.parseFloat(dataCols[0]);
-					longitude=Float.parseFloat(dataCols[1]);
-					timeStamp=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(dataCols[5]+" "+dataCols[6]);
-					if(isTargetPoint(timeStamp,startTimes,endTimes)) {
-						PointHybrid curPoint=new PointHybrid(lattitude, longitude,timeStamp);
+				List<PointHybrid> segment=new ArrayList<>();
+				for(PointHybrid curPoint:tripData){
+					if(isTargetPoint(curPoint.getTimestamp(),startTimes,endTimes)) {
 						segment.add(curPoint);
 						flag=false;
 					}else {

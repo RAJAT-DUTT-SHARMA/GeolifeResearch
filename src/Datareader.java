@@ -1,4 +1,3 @@
-package pocessing;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,13 +9,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import beans.PointHybrid;
-
 public class Datareader {
 	
 	static String directoryPath="/media/errajatds/Stuff/work stuff/iot/iot data/geolife/Geolife Trajectories 1.3/FilteredData/";
 	
-	public static String getFolderName(int i){
+	static String getFolderName(int i){
 		int a=0,b=0,c=0;
 		c=i%10;
 		b=(i/10)%10;

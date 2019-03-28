@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
+import beans.PointHybrid;
+
 public class Controller {
 
 	public static void main(String args[]) {

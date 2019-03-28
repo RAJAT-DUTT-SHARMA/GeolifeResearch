@@ -6,6 +6,10 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/errajatds/Downloads/gson-2.8.5.jar"/>
+	<classpathentry kind="lib" path="/home/errajatds/Downloads/jfreechart-1.0.19/lib/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="/home/errajatds/Downloads/jfreechart-1.0.19/lib/jfreechart-1.0.19.jar"/>
+	<classpathentry kind="lib" path="/home/errajatds/Downloads/gson-2.3.1.jar"/>
+	<classpathentry kind="lib" path="/home/errajatds/Downloads/opencsv-4.5.jar"/>
+	<classpathentry kind="lib" path="/home/errajatds/Downloads/joda-time-2.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
